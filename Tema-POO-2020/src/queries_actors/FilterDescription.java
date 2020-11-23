@@ -1,4 +1,4 @@
-package queries;
+package queries_actors;
 
 import common.Constants;
 import fileio.ActorInputData;

@@ -10,7 +10,12 @@ import common.Constants;
 import fileio.*;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import queries.*;
+import queries_actors.Average;
+import queries_actors.Awards;
+import queries_actors.FilterDescription;
+import queries_actors.MovieInputData;
+import queries_users.NumberOfRatings;
+import queries_videos.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -266,6 +271,16 @@ public final class Main {
 
                 }
 
+            }
+
+            // query for users;
+            if (action_type.equalsIgnoreCase("query") &&
+                    criteria.equalsIgnoreCase("num_ratings")){
+
+                NumberOfRatings numberOfRatings = new NumberOfRatings(users, Id,
+                        number, sort_type);
+                JSONObject obj = numberOfRatings.getNumberOfRatings();
+                arrayResult.add(obj);
             }
 
 

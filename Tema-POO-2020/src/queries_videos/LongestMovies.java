@@ -1,15 +1,15 @@
-package queries;
+package queries_videos;
 
 import common.Constants;
-import fileio.SerialInputData;
+import queries_actors.MovieInputData;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class LongestSerials {
-    private final List<SerialInputData> serials;
+public class LongestMovies {
+    private final List<MovieInputData> movies;
 
     private final int ID;
 
@@ -21,8 +21,8 @@ public class LongestSerials {
 
     private final List<String> genres;
 
-    public LongestSerials(List<SerialInputData> serials, int ID, int number, String sort_type, List<String> years, List<String> genres) {
-        this.serials = serials;
+    public LongestMovies(List<MovieInputData> movies, int ID, int number, String sort_type, List<String> years, List<String> genres) {
+        this.movies = movies;
         this.ID = ID;
         this.number = number;
         this.sort_type = sort_type;
@@ -30,40 +30,34 @@ public class LongestSerials {
         this.genres = genres;
     }
 
-    public JSONObject getLongestSerials(){
+    public JSONObject getLongestMovies(){
         JSONObject object = new JSONObject();
         List<String> query = new ArrayList<>();
 
-        // calculate total duration for all of the serials;
-        for (SerialInputData serial : serials){
-
-            serial.calculateDuration();
-        }
-
-        // sort serials' list ascendent by duration;
+        // sort movies' list ascendent by duration;
         if (sort_type.equalsIgnoreCase("asc")){
 
-            for (int i = 0; i < serials.size() - 1; i++){
+            for (int i = 0; i < movies.size() - 1; i++){
 
-                for (int j = 0; j < serials.size() - i - 1; j++){
+                for (int j = 0; j < movies.size() - i - 1; j++){
 
-                    if (serials.get(j).getDuration() > serials.get(j + 1).getDuration()){
+                    if (movies.get(j).getDuration() > movies.get(j + 1).getDuration()){
 
-                        Collections.swap(serials, j, j + 1);
+                        Collections.swap(movies, j, j + 1);
                     }
 
-                    // if two serials have the same duration, sort them ascendent by name;
-                    if ((serials.get(j).getDuration() == serials.get(j + 1).getDuration())
-                            && (serials.get(j).getTitle().compareTo(serials.get(j + 1).getTitle()) > 0)){
+                    // if two movies have the same duration, sort them ascendent by name;
+                    if ((movies.get(j).getDuration() == movies.get(j + 1).getDuration())
+                            && (movies.get(j).getTitle().compareTo(movies.get(j + 1).getTitle()) > 0)){
 
-                        Collections.swap(serials, j, j + 1);
+                        Collections.swap(movies, j, j + 1);
                     }
 
                 }
             }
 
             int count = 0;
-            for (SerialInputData serial : serials) {
+            for (MovieInputData movie : movies) {
 
                 if (count < number) {
 
@@ -74,7 +68,7 @@ public class LongestSerials {
                     if (years.get(0) != null) {
 
                         flag1 = false;
-                        String year_string = String.valueOf(serial.getYear());
+                        String year_string = String.valueOf(movie.getYear());
                         for (String year : years) {
 
                             if (year.equalsIgnoreCase(year_string)) {
@@ -97,7 +91,7 @@ public class LongestSerials {
                             int genres_found = 0;
                             for (String genre : genres) {
 
-                                for (String serial_genre : serial.getGenres()) {
+                                for (String serial_genre : movie.getGenres()) {
 
                                     if (genre.equalsIgnoreCase(serial_genre)) {
 
@@ -115,7 +109,7 @@ public class LongestSerials {
 
                     if (flag1 && flag2) {
 
-                        query.add(serial.getTitle());
+                        query.add(movie.getTitle());
                         count++;
                     }
                 }
@@ -128,29 +122,29 @@ public class LongestSerials {
 
         if (sort_type.equalsIgnoreCase("desc")){
 
-            // sort serials' list descendent by duration;
-            for (int i = 0; i < serials.size() - 1; i++){
+            // sort movies' list descendent by duration;
+            for (int i = 0; i < movies.size() - 1; i++){
 
-                for (int j = 0; j < serials.size() - i - 1; j++){
+                for (int j = 0; j < movies.size() - i - 1; j++){
 
-                    if (serials.get(j).getDuration() <
-                            serials.get(j + 1).getDuration()){
+                    if (movies.get(j).getDuration() <
+                            movies.get(j + 1).getDuration()){
 
-                        Collections.swap(serials, j, j + 1);
+                        Collections.swap(movies, j, j + 1);
                     }
 
-                    // if two serials have the same duration, sort them descendent by name;
-                    if ((serials.get(j).getDuration() == serials.get(j + 1).getDuration())
-                            && (serials.get(j).getTitle().compareTo(serials.get(j + 1).getTitle()) < 0)){
+                    // if two movies have the same duration, sort them descendent by name;
+                    if ((movies.get(j).getDuration() == movies.get(j + 1).getDuration())
+                            && (movies.get(j).getTitle().compareTo(movies.get(j + 1).getTitle()) < 0)){
 
-                        Collections.swap(serials, j, j + 1);
+                        Collections.swap(movies, j, j + 1);
                     }
 
                 }
             }
 
             int count = 0;
-            for (SerialInputData serial : serials) {
+            for (MovieInputData serial : movies) {
 
                 if (count < number) {
 

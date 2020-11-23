@@ -1,98 +1,94 @@
-package queries;
+package queries_videos;
 
 import common.Constants;
-import fileio.MovieInputData;
+import fileio.SerialInputData;
 import fileio.UserInputData;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-public class FavouriteMovies {
+public class Most_viewedSerials {
     private final List<UserInputData> users;
 
-    private final List<MovieInputData> movies;
+    private final List<SerialInputData> serials;
 
     private final int ID;
 
-    private final String sort_type;
-
     private final int number;
+
+    private final String sort_type;
 
     private final List<String> years;
 
     private final List<String> genres;
 
-    public FavouriteMovies(List<UserInputData> users, List<MovieInputData> movies,
-                            int ID, String sort_type, int number, List<String> years,
-                            List<String> genres) {
+    public Most_viewedSerials(List<UserInputData> users, List<SerialInputData> serials,
+                              int ID, int number, String sort_type, List<String> years,
+                              List<String> genres) {
         this.users = users;
-        this.movies = movies;
+        this.serials = serials;
         this.ID = ID;
-        this.sort_type = sort_type;
         this.number = number;
+        this.sort_type = sort_type;
         this.years = years;
         this.genres = genres;
     }
 
-    public JSONObject getFavouriteMovies(){
-
+    public JSONObject getMost_viewedSerials(){
         JSONObject object = new JSONObject();
         List<String> query = new ArrayList<>();
 
-        for (MovieInputData movie : movies){
+        // calculate views number for every serial;
+        for (SerialInputData serial : serials){
 
-            int count = 0;
-            String title = movie.getTitle();
-
+            int views_number = 0;
             for (UserInputData user : users){
 
-                List<String> favourites = user.getFavoriteMovies();
-                for (String favourite : favourites){
+                Map<String, Integer> history = user.getHistory();
 
-                    if (favourite.equalsIgnoreCase(title)){
+                for (Map.Entry<String, Integer> entry : history.entrySet()) {
 
-                        count++ ;
-                        break;
+                    if (entry.getKey().equalsIgnoreCase(serial.getTitle())){
+
+                        views_number += entry.getValue();
                     }
                 }
             }
-
-            movie.setFavourite_appeareances(count);
-
+            serial.setViews(views_number);
         }
 
-        // sort movies' list ascendent by appearences' number;
+        // sort serials' list ascendent by views;
         if (sort_type.equalsIgnoreCase("asc")){
-            for (int i = 0; i < movies.size() - 1; i++){
 
-                for (int j = 0; j < movies.size() - i - 1; j++){
+            for (int i = 0; i < serials.size() - 1; i++){
 
-                    if (movies.get(j).getFavourite_appeareances() >
-                            movies.get(j + 1).getFavourite_appeareances()){
+                for (int j = 0; j < serials.size() - i - 1; j++){
 
-                        Collections.swap(movies, j, j + 1);
+                    if (serials.get(j).getViews() > serials.get(j + 1).getViews()){
+
+                        Collections.swap(serials, j, j + 1);
                     }
 
-                    // if two movies have the same appearences' number, sort them ascendent by name;
-                    if ((movies.get(j).getFavourite_appeareances() == movies.get(j + 1).getFavourite_appeareances())
-                            && (movies.get(j).getTitle().compareTo(movies.get(j + 1).getTitle()) > 0)){
+                    // if two serials have the same number of views, sort them ascendent by name;
+                    if ((serials.get(j).getViews() == serials.get(j + 1).getViews())
+                            && (serials.get(j).getTitle().compareTo(serials.get(j + 1).getTitle()) > 0)){
 
-                        Collections.swap(movies, j, j + 1);
+                        Collections.swap(serials, j, j + 1);
                     }
 
                 }
             }
 
             int count = 0;
-            for (MovieInputData movie : movies) {
+            for (SerialInputData serial : serials) {
 
                 if (count < number) {
 
-                    // verify if the movie's appearences' number is 0;
-                    if (movie.getFavourite_appeareances() != 0) {
-
+                    // verify if number of views is 0;
+                    if (serial.getViews() != 0){
                         boolean flag1 = true;
                         boolean flag2 = true;
 
@@ -100,7 +96,7 @@ public class FavouriteMovies {
                         if (years.get(0) != null) {
 
                             flag1 = false;
-                            String year_string = String.valueOf(movie.getYear());
+                            String year_string = String.valueOf(serial.getYear());
                             for (String year : years) {
 
                                 if (year.equalsIgnoreCase(year_string)) {
@@ -117,19 +113,21 @@ public class FavouriteMovies {
                             if (!flag1) {
 
                                 flag2 = false;
-                            } else {
+                            }
+                            else {
 
                                 int genres_found = 0;
                                 for (String genre : genres) {
 
-                                    for (String movie_genre : movie.getGenres()) {
+                                    for (String serial_genre : serial.getGenres()) {
 
-                                        if (genre.equalsIgnoreCase(movie_genre)) {
+                                        if (genre.equalsIgnoreCase(serial_genre)) {
 
                                             genres_found++;
                                         }
                                     }
                                 }
+
                                 if (genres_found != genres.size()) {
 
                                     flag2 = false;
@@ -139,7 +137,7 @@ public class FavouriteMovies {
 
                         if (flag1 && flag2) {
 
-                            query.add(movie.getTitle());
+                            query.add(serial.getTitle());
                             count++;
                         }
                     }
@@ -153,34 +151,34 @@ public class FavouriteMovies {
 
         if (sort_type.equalsIgnoreCase("desc")){
 
-            // sort movies' list descendent by appearences' number;
-            for (int i = 0; i < movies.size() - 1; i++){
+            // sort serials' list descendent by number of views;
+            for (int i = 0; i < serials.size() - 1; i++){
 
-                for (int j = 0; j < movies.size() - i - 1; j++){
+                for (int j = 0; j < serials.size() - i - 1; j++){
 
-                    if (movies.get(j).getFavourite_appeareances() <
-                            movies.get(j + 1).getFavourite_appeareances()){
+                    if (serials.get(j).getDuration() <
+                            serials.get(j + 1).getDuration()){
 
-                        Collections.swap(movies, j, j + 1);
+                        Collections.swap(serials, j, j + 1);
                     }
 
-                    // if two movies have the same appearences' number, sort them descendent by name;
-                    if ((movies.get(j).getFavourite_appeareances() == movies.get(j + 1).getFavourite_appeareances())
-                            && (movies.get(j).getTitle().compareTo(movies.get(j + 1).getTitle()) < 0)){
+                    // if two serials have the same number of views, sort them descendent by name;
+                    if ((serials.get(j).getDuration() == serials.get(j + 1).getDuration())
+                            && (serials.get(j).getTitle().compareTo(serials.get(j + 1).getTitle()) < 0)){
 
-                        Collections.swap(movies, j, j + 1);
+                        Collections.swap(serials, j, j + 1);
                     }
 
                 }
             }
 
             int count = 0;
-            for (MovieInputData movie : movies) {
+            for (SerialInputData serial : serials) {
 
                 if (count < number) {
 
-                    // verify if the movie's appearences' number is 0;
-                    if (movie.getFavourite_appeareances() != 0) {
+                    // verify if number of views is 0;
+                    if (serial.getViews() != 0){
 
                         boolean flag1 = true;
                         boolean flag2 = true;
@@ -189,7 +187,7 @@ public class FavouriteMovies {
                         if (years.get(0) != null) {
 
                             flag1 = false;
-                            String year_string = String.valueOf(movie.getYear());
+                            String year_string = String.valueOf(serial.getYear());
                             for (String year : years) {
 
                                 if (year.equalsIgnoreCase(year_string)) {
@@ -206,19 +204,21 @@ public class FavouriteMovies {
                             if (!flag1) {
 
                                 flag2 = false;
-                            } else {
+                            }
+                            else {
 
                                 int genres_found = 0;
                                 for (String genre : genres) {
 
-                                    for (String movie_genre : movie.getGenres()) {
+                                    for (String serial_genre : serial.getGenres()) {
 
-                                        if (genre.equalsIgnoreCase(movie_genre)) {
+                                        if (genre.equalsIgnoreCase(serial_genre)) {
 
                                             genres_found++;
                                         }
                                     }
                                 }
+
                                 if (genres_found != genres.size()) {
 
                                     flag2 = false;
@@ -228,7 +228,7 @@ public class FavouriteMovies {
 
                         if (flag1 && flag2) {
 
-                            query.add(movie.getTitle());
+                            query.add(serial.getTitle());
                             count++;
                         }
                     }
@@ -240,6 +240,8 @@ public class FavouriteMovies {
             return object;
         }
 
+        object.put(Constants.ID_STRING, this.ID);
+        object.put(Constants.MESSAGE, "Query result: " + query);
         return object;
     }
 

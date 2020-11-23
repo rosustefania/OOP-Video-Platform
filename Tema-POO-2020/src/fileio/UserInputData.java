@@ -33,6 +33,8 @@ public final class UserInputData {
 
     private final Map<String, Double> moviesRatings = new HashMap<>();
 
+    private int given_ratings;
+
     public UserInputData(final String username, final String subscriptionType,
                          final Map<String, Integer> history,
                          final ArrayList<String> favoriteMovies) {
@@ -40,6 +42,7 @@ public final class UserInputData {
         this.subscriptionType = subscriptionType;
         this.favoriteMovies = favoriteMovies;
         this.history = history;
+        this.given_ratings = 0;
     }
 
     public String getUsername() {
@@ -60,6 +63,14 @@ public final class UserInputData {
 
     public Map<String, Double> getMoviesRatings() {
         return moviesRatings;
+    }
+
+    public int getGiven_ratings() {
+        return given_ratings;
+    }
+
+    public void setGiven_ratings(int given_ratings) {
+        this.given_ratings = given_ratings;
     }
 
     @Override
