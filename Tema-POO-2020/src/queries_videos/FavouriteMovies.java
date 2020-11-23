@@ -1,14 +1,16 @@
-package queries;
+package queries_videos;
 
 import common.Constants;
-import fileio.MovieInputData;
+import queries_actors.MovieInputData;
+import fileio.UserInputData;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class RatingMovies {
+public class FavouriteMovies {
+    private final List<UserInputData> users;
 
     private final List<MovieInputData> movies;
 
@@ -22,8 +24,10 @@ public class RatingMovies {
 
     private final List<String> genres;
 
-    public RatingMovies(List<MovieInputData> movies, final int ID, String sort_type,
-                         int number, final List<String> years, final List<String> genres){
+    public FavouriteMovies(List<UserInputData> users, List<MovieInputData> movies,
+                            int ID, String sort_type, int number, List<String> years,
+                            List<String> genres) {
+        this.users = users;
         this.movies = movies;
         this.ID = ID;
         this.sort_type = sort_type;
@@ -32,27 +36,47 @@ public class RatingMovies {
         this.genres = genres;
     }
 
-    public JSONObject getRatingMovies(){
+    public JSONObject getFavouriteMovies(){
+
         JSONObject object = new JSONObject();
         List<String> query = new ArrayList<>();
 
-        // sort movies' list ascendent by average rating;
+        for (MovieInputData movie : movies){
+
+            int count = 0;
+            String title = movie.getTitle();
+
+            for (UserInputData user : users){
+
+                List<String> favourites = user.getFavoriteMovies();
+                for (String favourite : favourites){
+
+                    if (favourite.equalsIgnoreCase(title)){
+
+                        count++ ;
+                        break;
+                    }
+                }
+            }
+
+            movie.setFavourite_appeareances(count);
+
+        }
+
+        // sort movies' list ascendent by appearences' number;
         if (sort_type.equalsIgnoreCase("asc")){
             for (int i = 0; i < movies.size() - 1; i++){
 
                 for (int j = 0; j < movies.size() - i - 1; j++){
 
-                    // calculate movies' average rating;
-                    movies.get(j).mean();
-                    movies.get(j + 1).mean();
-
-                    if (movies.get(j).getRatings_mean() > movies.get(j + 1).getRatings_mean()){
+                    if (movies.get(j).getFavourite_appeareances() >
+                            movies.get(j + 1).getFavourite_appeareances()){
 
                         Collections.swap(movies, j, j + 1);
                     }
 
-                    // if two movies have the same average rating, sort tem ascendent by name;
-                    if ((movies.get(j).getRatings_mean().equals(movies.get(j + 1).getRatings_mean()))
+                    // if two movies have the same appearences' number, sort them ascendent by name;
+                    if ((movies.get(j).getFavourite_appeareances() == movies.get(j + 1).getFavourite_appeareances())
                             && (movies.get(j).getTitle().compareTo(movies.get(j + 1).getTitle()) > 0)){
 
                         Collections.swap(movies, j, j + 1);
@@ -66,10 +90,8 @@ public class RatingMovies {
 
                 if (count < number) {
 
-                    movie.mean();
-
-                    // verify if the movie's average rating is 0;
-                    if (movie.getRatings_mean() != 0) {
+                    // verify if the movie's appearences' number is 0;
+                    if (movie.getFavourite_appeareances() != 0) {
 
                         boolean flag1 = true;
                         boolean flag2 = true;
@@ -95,8 +117,7 @@ public class RatingMovies {
                             if (!flag1) {
 
                                 flag2 = false;
-                            }
-                            else {
+                            } else {
 
                                 int genres_found = 0;
                                 for (String genre : genres) {
@@ -132,22 +153,19 @@ public class RatingMovies {
 
         if (sort_type.equalsIgnoreCase("desc")){
 
-            // sort movies' list descendent by average rating;
+            // sort movies' list descendent by appearences' number;
             for (int i = 0; i < movies.size() - 1; i++){
 
                 for (int j = 0; j < movies.size() - i - 1; j++){
 
-                    // calculate movies' average rating;
-                    movies.get(j).mean();
-                    movies.get(j + 1).mean();
-
-                    if (movies.get(j).getRatings_mean() < movies.get(j + 1).getRatings_mean()){
+                    if (movies.get(j).getFavourite_appeareances() <
+                            movies.get(j + 1).getFavourite_appeareances()){
 
                         Collections.swap(movies, j, j + 1);
                     }
 
-                    // if two movies have the same average rating, sort tem descendent by name;
-                    if ((movies.get(j).getRatings_mean().equals(movies.get(j + 1).getRatings_mean()))
+                    // if two movies have the same appearences' number, sort them descendent by name;
+                    if ((movies.get(j).getFavourite_appeareances() == movies.get(j + 1).getFavourite_appeareances())
                             && (movies.get(j).getTitle().compareTo(movies.get(j + 1).getTitle()) < 0)){
 
                         Collections.swap(movies, j, j + 1);
@@ -161,10 +179,8 @@ public class RatingMovies {
 
                 if (count < number) {
 
-                    movie.mean();
-
-                    // verify if the movie's average rating is 0;
-                    if (movie.getRatings_mean() != 0) {
+                    // verify if the movie's appearences' number is 0;
+                    if (movie.getFavourite_appeareances() != 0) {
 
                         boolean flag1 = true;
                         boolean flag2 = true;
@@ -190,8 +206,7 @@ public class RatingMovies {
                             if (!flag1) {
 
                                 flag2 = false;
-                            }
-                            else {
+                            } else {
 
                                 int genres_found = 0;
                                 for (String genre : genres) {
@@ -227,7 +242,5 @@ public class RatingMovies {
 
         return object;
     }
-
-
 
 }

@@ -2,7 +2,7 @@ package commands;
 
 import common.Constants;
 import entertainment.SerialSeason;
-import fileio.MovieInputData;
+import queries_actors.MovieInputData;
 import fileio.SerialInputData;
 import fileio.UserInputData;
 import org.json.JSONObject;

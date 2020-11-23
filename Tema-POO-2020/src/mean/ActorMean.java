@@ -1,7 +1,7 @@
 package mean;
 
 import fileio.ActorInputData;
-import fileio.MovieInputData;
+import queries_actors.MovieInputData;
 import fileio.SerialInputData;
 
 import java.util.List;

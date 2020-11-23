@@ -1,29 +1,34 @@
-package queries;
+package queries_videos;
 
 import common.Constants;
 import fileio.SerialInputData;
+import fileio.UserInputData;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class RatingSerials {
+public class FavouriteSerials {
+
+    private final List<UserInputData> users;
 
     private final List<SerialInputData> serials;
 
     private final int ID;
 
-    private final String sort_type;
-
     private final int number;
+
+    private final String sort_type;
 
     private final List<String> years;
 
     private final List<String> genres;
 
-    public RatingSerials(List<SerialInputData> serials, final int ID, String sort_type,
-                         int number, final List<String> years, final List<String> genres){
+    public FavouriteSerials(List<UserInputData> users, List<SerialInputData> serials,
+                            int ID, final String sort_type, int number, List<String> years,
+                            List<String> genres) {
+        this.users = users;
         this.serials = serials;
         this.ID = ID;
         this.sort_type = sort_type;
@@ -32,28 +37,49 @@ public class RatingSerials {
         this.genres = genres;
     }
 
-    public JSONObject getRatingSerials(){
+    public JSONObject getFavouriteSerials(){
+
         JSONObject object = new JSONObject();
         List<String> query = new ArrayList<>();
 
-        // sort serials' list ascendent by average rating;
+        for (SerialInputData serial : serials){
+
+            int count = 0;
+            String title = serial.getTitle();
+
+            for (UserInputData user : users){
+
+                List<String> favourites = user.getFavoriteMovies();
+                for (String favourite : favourites){
+
+                    if (favourite.equalsIgnoreCase(title)){
+
+                        count++ ;
+                        break;
+                    }
+                }
+            }
+
+            serial.setFavourite_appearences(count);
+
+        }
+
+        // sort serials' list ascendent by appearences' number;
         if (sort_type.equalsIgnoreCase("asc")){
+
             for (int i = 0; i < serials.size() - 1; i++){
 
                 for (int j = 0; j < serials.size() - i - 1; j++){
 
-                    // calculate serials' average rating;
-                    serials.get(j).mean();
-                    serials.get(j + 1).mean();
-
-                    if (serials.get(j).getRatings_mean() > serials.get(j + 1).getRatings_mean()){
+                    if (serials.get(j).getFavourite_appearences() >
+                            serials.get(j + 1).getFavourite_appearences()){
 
                         Collections.swap(serials, j, j + 1);
                     }
 
-                    // if two serials have the same average rating, sort tem ascendent by name;
-                    if ((serials.get(j).getRatings_mean().equals(serials.get(j + 1).getRatings_mean()))
-                        && (serials.get(j).getTitle().compareTo(serials.get(j + 1).getTitle()) > 0)){
+                    // if two serials have the same appearences' number, sort them ascendent by name;
+                    if ((serials.get(j).getFavourite_appearences() == serials.get(j + 1).getFavourite_appearences())
+                            && (serials.get(j).getTitle().compareTo(serials.get(j + 1).getTitle()) > 0)){
 
                         Collections.swap(serials, j, j + 1);
                     }
@@ -66,10 +92,8 @@ public class RatingSerials {
 
                 if (count < number) {
 
-                    serial.mean();
-
-                    // verify if the serial's average rating is 0;
-                    if (serial.getRatings_mean() != 0) {
+                    // verify if the number of appearences in favourite lists is 0;
+                    if (serial.getFavourite_appearences() != 0) {
 
                         boolean flag1 = true;
                         boolean flag2 = true;
@@ -95,7 +119,8 @@ public class RatingSerials {
                             if (!flag1) {
 
                                 flag2 = false;
-                            } else {
+                            }
+                            else {
 
                                 int genres_found = 0;
                                 for (String genre : genres) {
@@ -108,6 +133,7 @@ public class RatingSerials {
                                         }
                                     }
                                 }
+
                                 if (genres_found != genres.size()) {
 
                                     flag2 = false;
@@ -131,22 +157,19 @@ public class RatingSerials {
 
         if (sort_type.equalsIgnoreCase("desc")){
 
-            // sort serials' list descendent by average rating;
+            // sort serials' list descendent by appearences' number;
             for (int i = 0; i < serials.size() - 1; i++){
 
                 for (int j = 0; j < serials.size() - i - 1; j++){
 
-                    // calculate serials' average rating;
-                    serials.get(j).mean();
-                    serials.get(j + 1).mean();
-
-                    if (serials.get(j).getRatings_mean() < serials.get(j + 1).getRatings_mean()){
+                    if (serials.get(j).getFavourite_appearences() <
+                            serials.get(j + 1).getFavourite_appearences()){
 
                         Collections.swap(serials, j, j + 1);
                     }
 
-                    // if two serials have the same average rating, sort tem descendent by name;
-                    if ((serials.get(j).getRatings_mean().equals(serials.get(j + 1).getRatings_mean()))
+                    // if two serials have the same appearences' number, sort them descendent by name;
+                    if ((serials.get(j).getFavourite_appearences() == serials.get(j + 1).getFavourite_appearences())
                             && (serials.get(j).getTitle().compareTo(serials.get(j + 1).getTitle()) < 0)){
 
                         Collections.swap(serials, j, j + 1);
@@ -160,10 +183,8 @@ public class RatingSerials {
 
                 if (count < number) {
 
-                    serial.mean();
-
-                    // verify if the serial's average rating is 0;
-                    if (serial.getRatings_mean() != 0) {
+                    // verify if the number of appearences in favourite lists is 0;
+                    if (serial.getFavourite_appearences() != 0) {
 
                         boolean flag1 = true;
                         boolean flag2 = true;
@@ -223,9 +244,8 @@ public class RatingSerials {
             return object;
         }
 
-        return object;
+    object.put(Constants.ID_STRING, this.ID);
+    object.put(Constants.MESSAGE, "Query result: " + query);
+    return object;
     }
-
-
-
 }

@@ -1,8 +1,7 @@
-package queries;
+package queries_actors;
 
 import common.Constants;
 import fileio.ActorInputData;
-import fileio.MovieInputData;
 import fileio.SerialInputData;
 import mean.ActorMean;
 import org.json.JSONObject;

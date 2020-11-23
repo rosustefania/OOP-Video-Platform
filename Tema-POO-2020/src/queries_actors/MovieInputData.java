@@ -1,4 +1,6 @@
-package fileio;
+package queries_actors;
+
+import fileio.ShowInput;
 
 import java.util.ArrayList;
 import java.util.List;
