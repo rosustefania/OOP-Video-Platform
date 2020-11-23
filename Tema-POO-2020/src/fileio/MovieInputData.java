@@ -21,6 +21,8 @@ public final class MovieInputData extends ShowInput {
 
     private int favourite_appeareances;
 
+    private int views;
+
     public MovieInputData(final String title, final ArrayList<String> cast,
                           final ArrayList<String> genres, final int year,
                           final int duration) {
@@ -28,6 +30,7 @@ public final class MovieInputData extends ShowInput {
         this.duration = duration;
         this.ratings_mean = 0.0;
         this.favourite_appeareances = 0;
+        this.views = 0;
     }
 
     public int getDuration() {
@@ -48,6 +51,14 @@ public final class MovieInputData extends ShowInput {
 
     public void setFavourite_appeareances(int favourite_appereances) {
         this.favourite_appeareances = favourite_appereances;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 
     @Override

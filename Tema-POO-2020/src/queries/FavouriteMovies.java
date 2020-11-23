@@ -63,7 +63,7 @@ public class FavouriteMovies {
 
         }
 
-        // sort movies' list ascendent by average rating;
+        // sort movies' list ascendent by appearences' number;
         if (sort_type.equalsIgnoreCase("asc")){
             for (int i = 0; i < movies.size() - 1; i++){
 
@@ -75,7 +75,7 @@ public class FavouriteMovies {
                         Collections.swap(movies, j, j + 1);
                     }
 
-                    // if two movies have the same average rating, sort tem ascendent by name;
+                    // if two movies have the same appearences' number, sort them ascendent by name;
                     if ((movies.get(j).getFavourite_appeareances() == movies.get(j + 1).getFavourite_appeareances())
                             && (movies.get(j).getTitle().compareTo(movies.get(j + 1).getTitle()) > 0)){
 
@@ -90,7 +90,7 @@ public class FavouriteMovies {
 
                 if (count < number) {
 
-                    // verify if the movie's average rating is 0;
+                    // verify if the movie's appearences' number is 0;
                     if (movie.getFavourite_appeareances() != 0) {
 
                         boolean flag1 = true;
@@ -153,7 +153,7 @@ public class FavouriteMovies {
 
         if (sort_type.equalsIgnoreCase("desc")){
 
-            // sort movies' list descendent by average rating;
+            // sort movies' list descendent by appearences' number;
             for (int i = 0; i < movies.size() - 1; i++){
 
                 for (int j = 0; j < movies.size() - i - 1; j++){
@@ -164,7 +164,7 @@ public class FavouriteMovies {
                         Collections.swap(movies, j, j + 1);
                     }
 
-                    // if two movies have the same average rating, sort tem descendent by name;
+                    // if two movies have the same appearences' number, sort them descendent by name;
                     if ((movies.get(j).getFavourite_appeareances() == movies.get(j + 1).getFavourite_appeareances())
                             && (movies.get(j).getTitle().compareTo(movies.get(j + 1).getTitle()) < 0)){
 
@@ -179,6 +179,7 @@ public class FavouriteMovies {
 
                 if (count < number) {
 
+                    // verify if the movie's appearences' number is 0;
                     if (movie.getFavourite_appeareances() != 0) {
 
                         boolean flag1 = true;

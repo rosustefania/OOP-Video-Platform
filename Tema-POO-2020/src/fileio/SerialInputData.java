@@ -24,6 +24,10 @@ public final class SerialInputData extends ShowInput {
 
     private int favourite_appearences;
 
+    private int duration;
+
+    private int views;
+
     public SerialInputData(final String title, final ArrayList<String> cast,
                            final ArrayList<String> genres,
                            final int numberOfSeasons, final ArrayList<Season> seasons,
@@ -33,6 +37,7 @@ public final class SerialInputData extends ShowInput {
         this.seasons = seasons;
         this.ratings_mean = 0.0;
         this.favourite_appearences = 0;
+        this.duration = 0;
     }
 
     public int getNumberSeason() {
@@ -55,6 +60,31 @@ public final class SerialInputData extends ShowInput {
         this.favourite_appearences = favourite_appearences;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
+    // calculate total duration;
+    public void calculateDuration(){
+        int duration = 0;
+
+        for (Season season : seasons){
+
+            duration += season.getDuration();
+        }
+
+        this.duration = duration;
+    }
+
+
     // calculate the average rating of the serial;
     public void mean(){
         double sum = 0.0;
@@ -75,6 +105,7 @@ public final class SerialInputData extends ShowInput {
             ratings_mean = sum / numberOfSeasons;
         }
     }
+
 
     @Override
     public String toString() {
