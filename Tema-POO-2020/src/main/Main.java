@@ -214,6 +214,60 @@ public final class Main {
 
             }
 
+            if (action_type.equalsIgnoreCase("query") &&
+                    criteria.equalsIgnoreCase("longest")){
+
+                List<String> years = command.getFilters().get(0);
+                List<String> genres = command.getFilters().get(1);
+
+                // longest query for serials;
+                if (object_type.equalsIgnoreCase("shows")){
+
+                    LongestSerials longestSerials = new LongestSerials(serials,
+                            Id, number, sort_type, years, genres);
+                    JSONObject obj = longestSerials.getLongestSerials();
+                    arrayResult.add(obj);
+
+                }
+
+                // longest query for movies;
+                if (object_type.equalsIgnoreCase("movies")){
+
+                    LongestMovies longestMovies = new LongestMovies(movies,
+                            Id, number, sort_type, years, genres);
+                    JSONObject obj = longestMovies.getLongestMovies();
+                    arrayResult.add(obj);
+
+                }
+            }
+
+            if (action_type.equalsIgnoreCase("query") &&
+                    criteria.equalsIgnoreCase("most_viewed")){
+
+                List<String> years = command.getFilters().get(0);
+                List<String> genres = command.getFilters().get(1);
+
+                // most_viewed query for serials;
+                if (object_type.equalsIgnoreCase("shows")){
+
+                    Most_viewedSerials most_viewedSerials = new Most_viewedSerials(users,
+                            serials, Id, number, sort_type, years, genres);
+                    JSONObject obj = most_viewedSerials.getMost_viewedSerials();
+                    arrayResult.add(obj);
+
+                }
+                // most_viewed query for movies;
+                if (object_type.equalsIgnoreCase("movies")){
+
+                    Most_viewedMovies most_viewedMovies = new Most_viewedMovies(users,
+                            movies, Id, number, sort_type, years, genres);
+                    JSONObject obj = most_viewedMovies.getMost_viewedMovies();
+                    arrayResult.add(obj);
+
+                }
+
+            }
+
 
         }
 

@@ -64,7 +64,7 @@ public class FavouriteSerials {
 
         }
 
-        // sort serials' list ascendent by average rating;
+        // sort serials' list ascendent by appearences' number;
         if (sort_type.equalsIgnoreCase("asc")){
 
             for (int i = 0; i < serials.size() - 1; i++){
@@ -77,7 +77,7 @@ public class FavouriteSerials {
                         Collections.swap(serials, j, j + 1);
                     }
 
-                    // if two serials have the same average rating, sort tem ascendent by name;
+                    // if two serials have the same appearences' number, sort them ascendent by name;
                     if ((serials.get(j).getFavourite_appearences() == serials.get(j + 1).getFavourite_appearences())
                             && (serials.get(j).getTitle().compareTo(serials.get(j + 1).getTitle()) > 0)){
 
@@ -157,7 +157,7 @@ public class FavouriteSerials {
 
         if (sort_type.equalsIgnoreCase("desc")){
 
-            // sort serials' list descendent by average rating;
+            // sort serials' list descendent by appearences' number;
             for (int i = 0; i < serials.size() - 1; i++){
 
                 for (int j = 0; j < serials.size() - i - 1; j++){
@@ -168,7 +168,7 @@ public class FavouriteSerials {
                         Collections.swap(serials, j, j + 1);
                     }
 
-                    // if two serials have the same average rating, sort tem descendent by name;
+                    // if two serials have the same appearences' number, sort them descendent by name;
                     if ((serials.get(j).getFavourite_appearences() == serials.get(j + 1).getFavourite_appearences())
                             && (serials.get(j).getTitle().compareTo(serials.get(j + 1).getTitle()) < 0)){
 
@@ -243,6 +243,7 @@ public class FavouriteSerials {
             object.put(Constants.MESSAGE, "Query result: " + query);
             return object;
         }
+
     object.put(Constants.ID_STRING, this.ID);
     object.put(Constants.MESSAGE, "Query result: " + query);
     return object;
