@@ -1,10 +1,7 @@
 package entertainment;
 
-import fileio.UserInputData;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Information about a season of a tv show
@@ -26,13 +23,13 @@ public final class Season {
     private List<Double> ratings;
 
     // Season's average rating;
-    private Double ratings_mean;
+    private Double ratingsMean;
 
     public Season(final int currentSeason, final int duration) {
         this.currentSeason = currentSeason;
         this.duration = duration;
         this.ratings = new ArrayList<>();
-        this.ratings_mean = 0.0;
+        this.ratingsMean = 0.0;
     }
 
     public int getDuration() {
@@ -51,21 +48,23 @@ public final class Season {
         this.ratings = ratings;
     }
 
-    public Double getRatings_mean() {
-        return ratings_mean;
+    public Double getRatingsMean() {
+        return ratingsMean;
     }
 
-    // calculate the average rating of the season
-    public void mean(){
-        if (!ratings.isEmpty()){
+    /**
+     * method that calculates the average rating of the season
+     */
+    public void mean() {
+        if (!ratings.isEmpty()) {
             Double sum = 0.0;
 
-            for (int i = 0; i < ratings.size(); i++){
+            for (Double rating : ratings) {
 
-                sum += ratings.get(i);
+                sum += rating;
             }
 
-            ratings_mean = sum / ratings.size();
+            ratingsMean = sum / ratings.size();
         }
     }
 

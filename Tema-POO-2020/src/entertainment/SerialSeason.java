@@ -1,11 +1,11 @@
 package entertainment;
 
-public class SerialSeason {
+public final class SerialSeason {
     private final String title;
 
     private final int currentSeason;
 
-    public SerialSeason(final String title, final int currentSeason){
+    public SerialSeason(final String title, final int currentSeason) {
         this.title = title;
         this.currentSeason = currentSeason;
     }
