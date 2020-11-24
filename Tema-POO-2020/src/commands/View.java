@@ -7,57 +7,57 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.Map;
 
-public class View {
-    public List<UserInputData> users;
+public final class View {
+  private final List<UserInputData> users;
 
-    public String user;
+  private final String user;
 
-    public String title;
+  private final String title;
 
-    public int ID;
+  private final int id;
 
-    public View(List<UserInputData> users, String user, String title, int ID) {
-        this.users = users;
-        this.user = user;
-        this.title = title;
-        this.ID = ID;
-    }
+  public View(
+      final List<UserInputData> users, final String user, final String title, final int id) {
+    this.users = users;
+    this.user = user;
+    this.title = title;
+    this.id = id;
+  }
 
-    public JSONObject markAsViewed(){
-        JSONObject object = new JSONObject();
+  /** method that mark a video as viewed; */
+  public JSONObject markAsViewed() {
+    JSONObject object = new JSONObject();
 
-        // search for user;
-        for (UserInputData u : users) {
+    // search for user;
+    for (UserInputData u : users) {
 
-            if (u.getUsername().equalsIgnoreCase(user)) {
+      if (u.getUsername().equalsIgnoreCase(user)) {
 
-                Map<String, Integer> history = u.getHistory();
+        Map<String, Integer> history = u.getHistory();
 
-                // if the show is already seen, grow views number;
-                for (Map.Entry<String, Integer> entry : history.entrySet()) {
+        // if the show is already seen, grow views number;
+        for (Map.Entry<String, Integer> entry : history.entrySet()) {
 
-                    if (entry.getKey().equalsIgnoreCase(title)) {
+          if (entry.getKey().equalsIgnoreCase(title)) {
 
-                        history.get(entry.setValue(entry.getValue() + 1));
-                        object.put(Constants.ID_STRING, this.ID);
-                        object.put(Constants.MESSAGE, "success -> " + this.title
-                                + " was viewed with total views of "
-                                + entry.getValue());
-                        return object;
-                    }
-                }
-
-                // if it's seen for the first time, add it in the history list
-                // with no_views = 1;
-                history.put(title, 1);
-                object.put(Constants.ID_STRING, this.ID);
-                object.put(Constants.MESSAGE, "success -> " + this.title +
-                        " was viewed with total views of 1");
-                return object;
-
-            }
+            history.get(entry.setValue(entry.getValue() + 1));
+            object.put(Constants.ID_STRING, this.id);
+            object.put(
+                Constants.MESSAGE,
+                "success -> " + this.title + " was viewed with total views of " + entry.getValue());
+            return object;
+          }
         }
-        return object;
-    }
 
+        // if it's seen for the first time, add it in the history list
+        // with no_views = 1;
+        history.put(title, 1);
+        object.put(Constants.ID_STRING, this.id);
+        object.put(
+            Constants.MESSAGE, "success -> " + this.title + " was viewed with total views of 1");
+        return object;
+      }
+    }
+    return object;
+  }
 }
