@@ -1,5 +1,8 @@
 package entertainment;
 
+/** class that help with rating command;
+ * stores just the name of the serial and on season of it;
+ */
 public final class SerialSeason {
     private final String title;
 

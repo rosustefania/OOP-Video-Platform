@@ -7,32 +7,159 @@ November 2020
 https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema
 
 # About the code
+    For commands:
+        - I created the Command class that contains three methods, each one of
+        them returning a JSON object that represents the answer of the given
+        command (favourite, view and raiting);
+        - addToFavourites method:
+           - searches for given username in the users' list;
+           - after finding him, verifies if the given video is already in the
+           favourites' list, if it's not verifies if the video is seen;
+           - if it's seen, then adds it to favourites;
+        - markAsViewed method:
+            - searches for given username in the users' list;
+            - after finding him, verifies if the video is seen;
+            - if it is grows number of views by one, if not adds it to the
+            history and gives it one view;
+        - giveGrade method:
+            - for this task, I added two new fields into the UserInputData
+            class; they are two maps that store the ratings a user gave;
+            - first searches for given username in the users' list;
+            - after finding him, verifies in the user's history to see if the
+            video is seen;
+            - if it is, searches to see if the video has been already rated by
+            this user; if not, it rates it and adds it to the map that stores
+            user's rating;
 
-We provide the input tests, the logic that parses them and the checker that runs them.
+    For queries:
+        - queries for actors:
+            - I created the ActorsQuery class that contains three methods, each
+            one of them returning a JSON object that represents the answer of
+            the given query(favourite, view and raiting);
+            - averageQuery:
+                - I created the ActorMean class; its method calculates the
+                average rating of an actor based of the ratings of the shows/
+                movies he plays in;
+                - applies the method to all of the actors and sorts them by the
+                rating (ascendent/descendent);
+                - then adds to the query the first n actors which have a rating
+                different than zero;
+            - awardsQuery:
+                - searches in the actors' list to see who have all the mentioned
+                awards and calculates the total number of awards won by each
+                actor;
+                - if an actor has all the mentioned awards, adds it to a map
+                that stores his name and the number of his awards;
+                - sorts the map by the number of awards (ascendent/descedent)
+                and adds the actors to the query;
+            - filterDescription:
+                - searches in every actor's description to see if it contains
+                all the given words (split the description into an array of
+                words);
+                - sorts the found actors by their name (ascendent/descendent)
+                and adds them to the query;
 
-* test_db - contains the tests in JSON format
-* src
-   * checker - the checker's sources including the checkstyle necessary files, not to be modified
-   * fileio - classes for parsing the input files, not to be modified
-   * common, utils
-        * contain utility classes with constants and static methods
-        * you can add your own functionality in the existing classes or add new classes as well
-   * actor
-        * contains an enum for the types of awards an actor can have - do not modify it
-        * you can add here your actor related classes
-   * entertainment
-        * contains an enum for the supported video genres - do not modify it
-        * class for representing a Season of a tv show - do not modify it
-        * you can add here your entertainment related classes
+        - queries for videos:
+            - queries for movies:
+                - I created the MoviesQuery class that contains four methods,
+                each one of them returning a JSON object that represents the
+                answer of the given query (rating, favourite, longest and most
+                viewed);
+                - getRatingMovies:
+                    - in the MovieInputData class I added a method that
+                    calculates the average rating of a movie and a field that
+                    stores it (I also use this for the average query);
+                    - sorts the movies by their average rating;
+                    - adds to the query the first n movies that have an average
+                    rating different than zero and have the given filters;
+                - getFavouriteMovies:
+                    - in the MovieInputData class I added a field that stores
+                    number of appearnces in the users' favourites;
+                    - for every movie, goes through users's list and calculates
+                    its number of appearences in users' favourites;
+                    - sorts the movies by the number of appearences and adds to
+                    query the first n movies that have this number different
+                    than zero and have the given filters;
+                - getLongestMovies:
+                    - sorts the movies by their duration;
+                    - adds to the query the first n movies that have the given
+                    filters;
+                - getMostViewedMovies:
+                    - in the MovieInputData class I added a field that stores
+                    number of views in the users' history list;
+                    - for every movie, goes through every user's history list
+                    and calculates its number of views;
+                    - sorts the movies by views and and adds to the query the
+                    first n movies that have at least one view and have the
+                    given filters;
 
-We encourage you to organize your implementation in packages based on the functionality their classes offer. Try to keep
-your code modular, readable and documented.
+            - queries for serials:
+                - the same pattern as the one for movies quries;
+                - the only differences are that for calculating serial's average
+                rating, first we calculate the average rating for every season
+                and for the duration of a serial, we sum up the durations of all
+                the seasons;
 
-# Testing
+        - queries for actors:
+            - I created the MoviesQuery class that contains one method that 
+            returns a JSON object that represents the answer of the given query
+            (number of ratings);
+            - getNumberOfRatings:
+                - for every user gets the number of ratings he gave (gets the
+                size of ratings' list);
+                - sorts users by this number;
+                - adds to the query the first n users that have the number of
+                given ratings different than zero;
 
-The Main class runs the checker on your implementation. Add the entry point to your implementation in it.
+    For recommendations:
+        - I created the Recommendation class that contains five methods, each
+        one of them returning a JSON object that represents the answer of the
+        given recommendation (standard,best unseen, popular, favourite and
+        searches);
+        - getStandardRecommendation:
+            - searches for the given user in the users' list;
+            - after finding him, goes through database (first through movies'
+            list then if it's the case through the serials' list) and finds the
+            first show he hasn't seen by searching in his history list and adds
+            it to the recommendation;
+            - if it doesn't find one unseen show then gives a specific message;
+        - getBestUnseenRecommendation:
+            - searches for the given user in the users' list;
+            - after finding him, goes through data base and adds to a map all
+             the shows that have an average rating;
+            - sorts the map by the average rating;
+            - goes through this map and finds the first show the user hasn't
+            seen and adds it to the recommendation;
+            - if it doesn't find one, goes through database and finds the first
+            unseen show and adds it to the recommendation;
+            - if it doesn't find one unseen show then gives a specific message;
+        - getPopularRecommendation:
+            - creates a map that stores every genre and its number of views;
+            - searches for the given user and verifies if he is a premium one;
+            - for every genre goes through every user's history and counts the
+            number of views;
+            - sorts the genres map descendent by the number of views;
+            - finds the first unseen show (from database order) that have the
+            most popular genre and adds it to the recommendation;
+            - if it doesn't find one, searches for the next popular genre;
+        - getFavouriteRecommendation:
+            - creates a map that stores every favourite shows and its number of
+            appearences in favourites' lists;
+            - searches for the given user and verifies if he is a premium one;
+            - searches in every user's favourites list and calculates the number
+            of appearences for every show;
+            - sorts the list descendent by number of appearences;
+            - finds the first show from the "favourite" map that hasn't been
+            seen by the given user;
+            - if it doesn't find one, searches for the first unseen show from
+            database;
+        - getSearchRecommendation:
+            - creates map that stores unseen shows (that have the given genre)
+             and their rating;
+            - searches for the given user and verifies if he is a premium one;
+            - searches for unseen shows that have the given genre and add them
+            to the map;
+            - sorts the map ascendent by average rating;
+            - adds to the recommendation the entire map;
 
-Run Main to test your implementation from the IDE or from command line.
 
-Run the main method from Test class with the name of the input file from the command line and the result will be written
-to the out.txt file. Thus, you can compare this result with ref.
