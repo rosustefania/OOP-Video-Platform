@@ -1,4 +1,4 @@
-package queries.videos;
+package queries;
 
 import common.Constants;
 import fileio.MovieInputData;

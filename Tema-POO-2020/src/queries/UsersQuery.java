@@ -1,4 +1,4 @@
-package queries.users;
+package queries;
 
 import common.Constants;
 import fileio.UserInputData;
