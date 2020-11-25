@@ -7,7 +7,7 @@ November 2020
 https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema
 
 # About the code
-    For commands:
+    For the commands:
         - I created the Command class that contains three methods, each one of
         them returning a JSON object that represents the answer of the given
         command (favourite, view and raiting);
@@ -31,7 +31,7 @@ https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema
             this user; if not, it rates it and adds it to the map that stores
             user's rating;
 
-    For queries:
+    For the queries:
         - queries for actors:
             - I created the ActorsQuery class that contains three methods, each
             one of them returning a JSON object that represents the answer of
@@ -111,7 +111,7 @@ https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema
                 - adds to the query the first n users that have the number of
                 given ratings different than zero;
 
-    For recommendations:
+    For the recommendations:
         - I created the Recommendation class that contains five methods, each
         one of them returning a JSON object that represents the answer of the
         given recommendation (standard,best unseen, popular, favourite and
