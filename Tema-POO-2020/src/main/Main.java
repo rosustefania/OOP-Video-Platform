@@ -15,11 +15,11 @@ import fileio.UserInputData;
 import fileio.Writer;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import queries.actors.ActorsQuery;
 
-import queries.users.UsersQuery;
-import queries.videos.MoviesQuery;
-import queries.videos.SerialsQuery;
+import queries.ActorsQuery;
+import queries.MoviesQuery;
+import queries.SerialsQuery;
+import queries.UsersQuery;
 import recommendations.Recommendation;
 
 import java.io.File;

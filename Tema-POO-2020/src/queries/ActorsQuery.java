@@ -1,4 +1,4 @@
-package queries.actors;
+package queries;
 
 import actor.ActorsAwards;
 import common.Constants;
