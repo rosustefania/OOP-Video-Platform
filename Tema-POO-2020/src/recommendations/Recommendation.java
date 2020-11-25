@@ -274,7 +274,7 @@ public class Recommendation {
 
                 if (genreMovie.equalsIgnoreCase(genre.name())) {
 
-                  // verify if the genre is already in the map;
+                  // verify if the genre is already to the map ;
                   for (Map.Entry<String, Integer> entryGenre : bestGenres.entrySet()) {
 
                     if (entryGenre.getKey().equalsIgnoreCase(genre.name())) {
@@ -305,7 +305,7 @@ public class Recommendation {
 
                 if (genreSerial.equalsIgnoreCase(genre.name())) {
 
-                  // verify if the genre is already in the map;
+                  // verify if the genre is already to the map ;
                   for (Map.Entry<String, Integer> entryGenre : bestGenres.entrySet()) {
 
                     if (entryGenre.getKey().equalsIgnoreCase(genre.name())) {
@@ -422,7 +422,7 @@ public class Recommendation {
       for (String favourite : user.getFavoriteMovies()) {
 
         boolean flag = false;
-        // verify if the genre is already in the map;
+        // verify if the genre is already to the map ;
         for (Map.Entry<String, Integer> entryFavourite : favouritesShows.entrySet()) {
 
           if (favourite.equalsIgnoreCase(entryFavourite.getKey())) {
@@ -557,7 +557,7 @@ public class Recommendation {
       return object;
     }
 
-    // search for unseen movies that have the given genre and add them in the map;
+    // search for unseen movies that have the given genre and add them to the map ;
     for (MovieInputData movie : movies) {
 
       boolean flag = false;
@@ -585,7 +585,7 @@ public class Recommendation {
       }
     }
 
-    // search for unseen serials that have the given genre and add them in the map;
+    // search for unseen serials that have the given genre and add them to the map;
     for (SerialInputData serial : serials) {
 
       boolean flag = false;
@@ -621,7 +621,7 @@ public class Recommendation {
       return object;
     }
 
-    // sort the list ascendent by rating;
+    // sort the map ascendent by rating;
     Map<String, Double> searchShowsSorted = new TreeMap<>(searchShows);
 
     object.put(Constants.ID_STRING, this.id);

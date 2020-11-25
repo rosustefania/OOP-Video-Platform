@@ -18,7 +18,7 @@ public final class Command {
 
   private final List<SerialInputData> serials;
 
-  private final String user;
+  private final String username;
 
   private final String title;
 
@@ -28,11 +28,11 @@ public final class Command {
 
   private final int seasonNumber;
 
-  public Command(final List<UserInputData> users, final String user, final String title,
+  public Command(final List<UserInputData> users, final String username, final String title,
                 final int id, final Double grade, final int seasonNumber,
                 final List<MovieInputData> movies, final List<SerialInputData> serials) {
     this.users = users;
-    this.user = user;
+    this.username = username;
     this.title = title;
     this.id = id;
     this.grade = grade;
@@ -44,13 +44,13 @@ public final class Command {
   /** method that adds a video to favorites; */
   public JSONObject addToFavourites() {
     JSONObject object = new JSONObject();
-    for (UserInputData u : users) {
+    for (UserInputData user : users) {
 
-      // search for user;
-      if (u.getUsername().equalsIgnoreCase(user)) {
+      // search for username;
+      if (user.getUsername().equalsIgnoreCase(username)) {
 
-        Map<String, Integer> history = u.getHistory();
-        ArrayList<String> favoriteMovies = u.getFavoriteMovies();
+        Map<String, Integer> history = user.getHistory();
+        ArrayList<String> favoriteMovies = user.getFavoriteMovies();
 
         // the case where the show it's already in the favourite list;
         for (String movie : favoriteMovies) {
@@ -89,12 +89,12 @@ public final class Command {
   public JSONObject markAsViewed() {
     JSONObject object = new JSONObject();
 
-    // search for user;
-    for (UserInputData u : users) {
+    // search for username;
+    for (UserInputData user : users) {
 
-      if (u.getUsername().equalsIgnoreCase(user)) {
+      if (user.getUsername().equalsIgnoreCase(username)) {
 
-        Map<String, Integer> history = u.getHistory();
+        Map<String, Integer> history = user.getHistory();
 
         // if the show is already seen, grow views number;
         for (Map.Entry<String, Integer> entry : history.entrySet()) {
@@ -128,15 +128,15 @@ public final class Command {
   public JSONObject giveGrade() {
     JSONObject object = new JSONObject();
 
-    // search for user;
-    for (UserInputData u : users) {
+    // search for username;
+    for (UserInputData user : users) {
 
-      if (u.getUsername().equalsIgnoreCase(user)) {
+      if (user.getUsername().equalsIgnoreCase(username)) {
 
-        // get user's lists;
-        Map<String, Integer> history = u.getHistory();
-        Map<SerialSeason, Double> serialsRatingList = u.getSerialsRatings();
-        Map<String, Double> moviesRatingList = u.getMoviesRatings();
+        // get username's lists;
+        Map<String, Integer> history = user.getHistory();
+        Map<SerialSeason, Double> serialsRatingList = user.getSerialsRatings();
+        Map<String, Double> moviesRatingList = user.getMoviesRatings();
 
         // verify if the show has been seen;
         for (String name : history.keySet()) {
@@ -149,7 +149,7 @@ public final class Command {
               for (String movie : moviesRatingList.keySet()) {
 
                 // verify if the movie has been already rated by
-                // this user;
+                // this username;
                 if (movie.equalsIgnoreCase(title)) {
 
                   object.put(Constants.ID_STRING, this.id);
@@ -179,7 +179,7 @@ public final class Command {
                               + " was rated with "
                               + this.grade
                               + " by "
-                              + this.user);
+                              + this.username);
               return object;
             }
 
@@ -220,7 +220,7 @@ public final class Command {
             object.put(
                     Constants.MESSAGE,
                     "success -> " + this.title + " was rated with " + this.grade + " by "
-                            + this.user);
+                            + this.username);
             return object;
           }
         }

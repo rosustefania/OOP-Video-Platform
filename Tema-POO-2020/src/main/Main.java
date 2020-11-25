@@ -106,6 +106,7 @@ public final class Main {
 
       JSONObject object = new JSONObject();
 
+      // commands;
       if (actionType.equalsIgnoreCase("command")) {
 
         Command comm = new Command(users, user, title, id, grade, seasonNumber, movies, serials);
@@ -125,7 +126,7 @@ public final class Main {
           object = comm.giveGrade();
         }
       }
-      
+
       // queries;
       if (actionType.equalsIgnoreCase("query")) {
 
@@ -140,88 +141,79 @@ public final class Main {
           ActorsQuery actorsQuery =
               new ActorsQuery(actors, id, number, sortType, movies, serials, awardslist, wordslist);
 
-          // average query for actors;
           if (criteria.equalsIgnoreCase("average")) {
 
             object = actorsQuery.averageQuery();
           }
 
-          // awards query for actors;
           if (criteria.equalsIgnoreCase("awards")) {
 
             object = actorsQuery.awardsQuery();
           }
 
-          // filter description query for actors;
           if (criteria.equalsIgnoreCase("filter_description")) {
 
             object = actorsQuery.filterDescription();
           }
         }
 
+        // queries for shows;
         if (objectType.equalsIgnoreCase("shows")) {
 
           SerialsQuery serialsQuery =
                   new SerialsQuery(users, serials, id, sortType, number, years, genres);
 
-          // rating query for serials;
           if (criteria.equalsIgnoreCase("ratings")) {
 
             object = serialsQuery.getRatingSerials();
           }
 
-          // favorite query for serials;
           if (criteria.equalsIgnoreCase("favorite")) {
 
             object = serialsQuery.getFavouriteSerials();
           }
 
-          // longest query for serials;
           if (criteria.equalsIgnoreCase("longest")) {
 
             object = serialsQuery.getLongestSerials();
           }
 
-          // most_viewed query for serials;
           if (criteria.equalsIgnoreCase("most_viewed")) {
 
             object = serialsQuery.getMostViewedSerials();
           }
         }
 
+        // queries for movies;
         if (objectType.equalsIgnoreCase("movies")) {
 
           MoviesQuery moviesQuery =
                   new MoviesQuery(users, movies, id, sortType, number, years, genres);
 
-          // rating query for movies;
           if (criteria.equalsIgnoreCase("ratings")) {
 
             object = moviesQuery.getRatingMovies();
           }
 
-          // favorite query for movies;
           if (criteria.equalsIgnoreCase("favorite")) {
 
             object = moviesQuery.getFavouriteMovies();
           }
 
-          // longest query for movies;
           if (criteria.equalsIgnoreCase("longest")) {
 
             object = moviesQuery.getLongestMovies();
           }
 
-          // most_viewed query for movies;
           if (criteria.equalsIgnoreCase("most_viewed")) {
 
             object = moviesQuery.getMostViewedMovies();
           }
         }
 
+        // query for users;
         if (objectType.equalsIgnoreCase("users")) {
 
-          // query for users;
           if (criteria.equalsIgnoreCase("num_ratings")) {
 
             UsersQuery usersQuery = new UsersQuery(users, id, number, sortType);
@@ -230,37 +222,33 @@ public final class Main {
         }
       }
 
+      // recommendations;
       if (actionType.equalsIgnoreCase("recommendation")) {
 
         String givenGenre = command.getGenre();
         Recommendation recommendation =
                 new Recommendation(users, movies, serials, id, user, givenGenre);
 
-        // standard recommendation;
         if (type.equalsIgnoreCase("standard")) {
 
           object = recommendation.getStandardRecommendation();
         }
 
-        // best unseen recommendation;
         if (type.equalsIgnoreCase("best_unseen")) {
 
           object = recommendation.getBestUnseenRecommendation();
         }
 
-        // popular recommendation;
         if (type.equalsIgnoreCase("popular")) {
 
           object = recommendation.getPopularRecommendation();
         }
 
-        // favorite recommendation;
         if (type.equalsIgnoreCase("favorite")) {
 
           object = recommendation.getFavouriteRecommendation();
         }
 
-        // search recommendation;
         if (type.equalsIgnoreCase("search")) {
 
           object = recommendation.getSearchRecommendation();

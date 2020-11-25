@@ -6,7 +6,7 @@ Starting audit...
 [ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\fileio\SerialInputData.java:58:39: Parameter favouriteAppearences should be final. [FinalParameters]
 [ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\fileio\SerialInputData.java:70:24: Parameter views should be final. [FinalParameters]
 [ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\fileio\UserInputData.java:66:31: Parameter givenRatings should be final. [FinalParameters]
-[ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\main\Main.java:76:3: Method length is 191 lines (max allowed is 150). [MethodLength]
+[ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\main\Main.java:76:3: Method length is 184 lines (max allowed is 150). [MethodLength]
 [ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\recommendations\Recommendation.java:232:3: Method length is 171 lines (max allowed is 150). [MethodLength]
 Audit done.
 Checkstyle ends with 9 errors.
