@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class NumberOfRatings {
+public class UsersQuery {
   private final List<UserInputData> users;
 
   private final int id;
@@ -17,7 +17,7 @@ public class NumberOfRatings {
 
   private final String sortType;
 
-  public NumberOfRatings(final List<UserInputData> users, final int id, final int number,
+  public UsersQuery(final List<UserInputData> users, final int id, final int number,
                          final String sortType) {
     this.users = users;
     this.id = id;

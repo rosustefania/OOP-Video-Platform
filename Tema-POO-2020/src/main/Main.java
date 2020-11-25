@@ -2,9 +2,8 @@ package main;
 
 import checker.Checker;
 import checker.Checkstyle;
-import commands.Favorite;
-import commands.Rating;
-import commands.View;
+import commands.Command;
+
 import common.Constants;
 import fileio.ActionInputData;
 import fileio.ActorInputData;
@@ -16,24 +15,12 @@ import fileio.UserInputData;
 import fileio.Writer;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import queries.actors.Average;
-import queries.actors.Awards;
-import queries.actors.FilterDescription;
-import queries.users.NumberOfRatings;
-import queries.videos.FavouriteMovies;
-import queries.videos.FavouriteSerials;
-import queries.videos.LongestMovies;
-import queries.videos.LongestSerials;
-import queries.videos.MostViewedMovies;
-import queries.videos.MostViewedSerials;
+import queries.actors.ActorsQuery;
 
-import queries.videos.RatingMovies;
-import queries.videos.RatingSerials;
-import recommendations.BestUnseenRecommendation;
-import recommendations.FavouriteRecommendation;
-import recommendations.PopularRecommendation;
-import recommendations.SearchRecommendation;
-import recommendations.StandardRecommendation;
+import queries.users.UsersQuery;
+import queries.videos.MoviesQuery;
+import queries.videos.SerialsQuery;
+import recommendations.Recommendation;
 
 import java.io.File;
 import java.io.IOException;
@@ -104,220 +91,183 @@ public final class Main {
     for (ActionInputData command : commands) {
 
       int id = command.getActionId();
+      int number = command.getNumber();
+      int seasonNumber = command.getSeasonNumber();
+
+      Double grade = command.getGrade();
+
       String user = command.getUsername();
       String actionType = command.getActionType();
       String objectType = command.getObjectType();
       String criteria = command.getCriteria();
       String sortType = command.getSortType();
-      int number = command.getNumber();
       String type = command.getType();
       String title = command.getTitle();
-      Double grade = command.getGrade();
-      int seasonNumber = command.getSeasonNumber();
 
-      // the command is "favourite";
-      if (actionType.equalsIgnoreCase("command") && type.equalsIgnoreCase("favorite")) {
+      JSONObject object = new JSONObject();
 
-        Favorite fav = new Favorite(users, user, title, id);
-        JSONObject obj = fav.addToFavourites();
-        arrayResult.add(obj);
+      if (actionType.equalsIgnoreCase("command")) {
+
+        Command comm = new Command(users, user, title, id, grade, seasonNumber, movies, serials);
+
+        if (type.equalsIgnoreCase("favorite")) {
+
+           object = comm.addToFavourites();
+        }
+
+        if (type.equalsIgnoreCase("view")) {
+
+          object = comm.markAsViewed();
+        }
+
+        if (type.equalsIgnoreCase("rating")) {
+
+          object = comm.giveGrade();
+        }
       }
-
-      // the command is "view";
-      if (actionType.equalsIgnoreCase("command") && type.equalsIgnoreCase("view")) {
-
-        View view = new View(users, user, title, id);
-        JSONObject obj = view.markAsViewed();
-        arrayResult.add(obj);
-      }
-
-      // the command is "rating";
-      if (actionType.equalsIgnoreCase("command") && type.equalsIgnoreCase("rating")) {
-
-        Rating rating = new Rating(users, user, title, id, grade, seasonNumber, movies, serials);
-        JSONObject obj = rating.giveGrade();
-        arrayResult.add(obj);
-      }
-
+      
       // queries;
       if (actionType.equalsIgnoreCase("query")) {
 
-        // average query for actors;
-        if (criteria.equalsIgnoreCase("average")) {
+        List<String> years = command.getFilters().get(0);
+        List<String> genres = command.getFilters().get(1);
+        List<String> awardslist = command.getFilters().get(command.getFilters().size() - 1);
+        List<String> wordslist = command.getFilters().get(command.getFilters().size() - 2);
 
-          Average average = new Average(actors, id, number, sortType, movies, serials);
-          JSONObject obj = average.averageQuery();
-          arrayResult.add(obj);
+        // queries for actors;
+        if (objectType.equalsIgnoreCase("actors")) {
+
+          ActorsQuery actorsQuery =
+              new ActorsQuery(actors, id, number, sortType, movies, serials, awardslist, wordslist);
+
+          // average query for actors;
+          if (criteria.equalsIgnoreCase("average")) {
+
+            object = actorsQuery.averageQuery();
+          }
+
+          // awards query for actors;
+          if (criteria.equalsIgnoreCase("awards")) {
+
+            object = actorsQuery.awardsQuery();
+          }
+
+          // filter description query for actors;
+          if (criteria.equalsIgnoreCase("filter_description")) {
+
+            object = actorsQuery.filterDescription();
+          }
         }
 
-        // awards query for actors;
-        if (criteria.equalsIgnoreCase("awards")) {
+        if (objectType.equalsIgnoreCase("shows")) {
 
-          List<String> awardslist = command.getFilters().get(command.getFilters().size() - 1);
-          Awards awards = new Awards(actors, id, sortType, awardslist);
-          JSONObject obj = awards.awardsQuery();
-          arrayResult.add(obj);
-        }
-
-        // filter description query for actors;
-        if (criteria.equalsIgnoreCase("filter_description")) {
-
-          List<String> wordslist = command.getFilters().get(2);
-          FilterDescription filter = new FilterDescription(actors, id, sortType, wordslist);
-          JSONObject obj = filter.filterDescription();
-          arrayResult.add(obj);
-        }
-
-        // rating query for videos;
-        if (criteria.equalsIgnoreCase("ratings")) {
-
-          List<String> years = command.getFilters().get(0);
-          List<String> genres = command.getFilters().get(1);
+          SerialsQuery serialsQuery =
+                  new SerialsQuery(users, serials, id, sortType, number, years, genres);
 
           // rating query for serials;
-          if (objectType.equalsIgnoreCase("shows")) {
+          if (criteria.equalsIgnoreCase("ratings")) {
 
-            RatingSerials ratingSerials =
-                new RatingSerials(serials, id, sortType, number, years, genres);
-            JSONObject obj = ratingSerials.getRatingSerials();
-            arrayResult.add(obj);
+            object = serialsQuery.getRatingSerials();
           }
 
-          // rating query for movies;
-          if (objectType.equalsIgnoreCase("movies")) {
+          // favorite query for serials;
+          if (criteria.equalsIgnoreCase("favorite")) {
 
-            RatingMovies ratingMovies =
-                new RatingMovies(movies, id, sortType, number, years, genres);
-            JSONObject obj = ratingMovies.getRatingMovies();
-            arrayResult.add(obj);
+            object = serialsQuery.getFavouriteSerials();
           }
-        }
-
-        if (criteria.equalsIgnoreCase("favorite")) {
-
-          List<String> years = command.getFilters().get(0);
-          List<String> genres = command.getFilters().get(1);
-
-          // favourite query for serials;
-          if (objectType.equalsIgnoreCase("shows")) {
-
-            FavouriteSerials favouriteSerials =
-                new FavouriteSerials(users, serials, id, sortType, number, years, genres);
-            JSONObject obj = favouriteSerials.getFavouriteSerials();
-            arrayResult.add(obj);
-          }
-
-          // favourite query for movies;
-          if (objectType.equalsIgnoreCase("movies")) {
-
-            FavouriteMovies favouriteMovies =
-                new FavouriteMovies(users, movies, id, sortType, number, years, genres);
-            JSONObject obj = favouriteMovies.getFavouriteMovies();
-            arrayResult.add(obj);
-          }
-        }
-
-        if (criteria.equalsIgnoreCase("longest")) {
-
-          List<String> years = command.getFilters().get(0);
-          List<String> genres = command.getFilters().get(1);
 
           // longest query for serials;
-          if (objectType.equalsIgnoreCase("shows")) {
+          if (criteria.equalsIgnoreCase("longest")) {
 
-            LongestSerials longestSerials =
-                new LongestSerials(serials, id, number, sortType, years, genres);
-            JSONObject obj = longestSerials.getLongestSerials();
-            arrayResult.add(obj);
+            object = serialsQuery.getLongestSerials();
+          }
+
+          // most_viewed query for serials;
+          if (criteria.equalsIgnoreCase("most_viewed")) {
+
+            object = serialsQuery.getMostViewedSerials();
+          }
+        }
+
+        if (objectType.equalsIgnoreCase("movies")) {
+
+          MoviesQuery moviesQuery =
+                  new MoviesQuery(users, movies, id, sortType, number, years, genres);
+
+          // rating query for movies;
+          if (criteria.equalsIgnoreCase("ratings")) {
+
+            object = moviesQuery.getRatingMovies();
+          }
+
+          // favorite query for movies;
+          if (criteria.equalsIgnoreCase("favorite")) {
+
+            object = moviesQuery.getFavouriteMovies();
           }
 
           // longest query for movies;
-          if (objectType.equalsIgnoreCase("movies")) {
+          if (criteria.equalsIgnoreCase("longest")) {
 
-            LongestMovies longestMovies =
-                new LongestMovies(movies, id, number, sortType, years, genres);
-            JSONObject obj = longestMovies.getLongestMovies();
-            arrayResult.add(obj);
+            object = moviesQuery.getLongestMovies();
           }
-        }
 
-        if (criteria.equalsIgnoreCase("most_viewed")) {
-
-          List<String> years = command.getFilters().get(0);
-          List<String> genres = command.getFilters().get(1);
-
-          // most_viewed query for serials;
-          if (objectType.equalsIgnoreCase("shows")) {
-
-            MostViewedSerials mostViewedSerials =
-                new MostViewedSerials(users, serials, id, number, sortType, years, genres);
-            JSONObject obj = mostViewedSerials.getMostViewedSerials();
-            arrayResult.add(obj);
-          }
           // most_viewed query for movies;
-          if (objectType.equalsIgnoreCase("movies")) {
+          if (criteria.equalsIgnoreCase("most_viewed")) {
 
-            MostViewedMovies mostViewedMovies =
-                new MostViewedMovies(users, movies, id, number, sortType, years, genres);
-            JSONObject obj = mostViewedMovies.getMostViewedMovies();
-            arrayResult.add(obj);
+            object = moviesQuery.getMostViewedMovies();
           }
         }
 
-        // query for users;
-        if (criteria.equalsIgnoreCase("num_ratings")) {
+        if (objectType.equalsIgnoreCase("users")) {
 
-          NumberOfRatings numberOfRatings = new NumberOfRatings(users, id, number, sortType);
-          JSONObject obj = numberOfRatings.getNumberOfRatings();
-          arrayResult.add(obj);
+          // query for users;
+          if (criteria.equalsIgnoreCase("num_ratings")) {
+
+            UsersQuery usersQuery = new UsersQuery(users, id, number, sortType);
+            object = usersQuery.getNumberOfRatings();
+          }
         }
       }
 
       if (actionType.equalsIgnoreCase("recommendation")) {
 
+        String givenGenre = command.getGenre();
+        Recommendation recommendation =
+                new Recommendation(users, movies, serials, id, user, givenGenre);
+
+        // standard recommendation;
         if (type.equalsIgnoreCase("standard")) {
 
-          StandardRecommendation standardRecommendation =
-              new StandardRecommendation(users, movies, serials, id, user);
-          JSONObject obj = standardRecommendation.getStandardRecommendation();
-          arrayResult.add(obj);
+          object = recommendation.getStandardRecommendation();
         }
 
+        // best unseen recommendation;
         if (type.equalsIgnoreCase("best_unseen")) {
 
-          BestUnseenRecommendation bestUnseen =
-                  new BestUnseenRecommendation(users, movies, serials, id, user);
-          JSONObject obj = bestUnseen.getBestUnseenRecommendation();
-          arrayResult.add(obj);
+          object = recommendation.getBestUnseenRecommendation();
         }
 
+        // popular recommendation;
         if (type.equalsIgnoreCase("popular")) {
 
-          PopularRecommendation popularRecommendation =
-                  new PopularRecommendation(users, movies, serials, id, user);
-          JSONObject obj = popularRecommendation.getPopularRecommendation();
-          arrayResult.add(obj);
+          object = recommendation.getPopularRecommendation();
         }
 
+        // favorite recommendation;
         if (type.equalsIgnoreCase("favorite")) {
 
-          FavouriteRecommendation favouriteRecommendation =
-                  new FavouriteRecommendation(users, movies, serials, id, user);
-          JSONObject obj = favouriteRecommendation.getFavouriteRecommendation();
-          arrayResult.add(obj);
+          object = recommendation.getFavouriteRecommendation();
         }
 
+        // search recommendation;
         if (type.equalsIgnoreCase("search")) {
 
-          String givenGenre = command.getGenre();
-          SearchRecommendation searchRecommendation =
-                  new SearchRecommendation(users, movies, serials, id, user, givenGenre);
-          JSONObject obj = searchRecommendation.getSearchRecommendation();
-          arrayResult.add(obj);
+          object = recommendation.getSearchRecommendation();
         }
       }
+      arrayResult.add(object);
     }
-
     fileWriter.closeJSON(arrayResult);
   }
 }
