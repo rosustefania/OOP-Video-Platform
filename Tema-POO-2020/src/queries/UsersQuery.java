@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class UsersQuery {
@@ -40,46 +41,18 @@ public class UsersQuery {
     // sort users ascendent by number of given ratings;
     if (sortType.equalsIgnoreCase("asc")) {
 
-      for (int i = 0; i < users.size() - 1; i++) {
-
-        for (int j = 0; j < users.size() - i - 1; j++) {
-
-          if (users.get(j).getGivenRatings() > users.get(j + 1).getGivenRatings()) {
-
-            Collections.swap(users, j, j + 1);
-          }
-
-          // if two users have the same number of given ratings, sort them ascendent by name;
-          if (users.get(j).getGivenRatings() == users.get(j + 1).getGivenRatings()
-              && users.get(j).getUsername().compareTo(users.get(j + 1).getUsername()) > 0) {
-
-            Collections.swap(users, j, j + 1);
-          }
-        }
-      }
+      users.sort(Comparator.comparing(UserInputData::getGivenRatings).
+              thenComparing(UserInputData::getUsername));
     }
 
     // sort users descendent by number of given ratings;
     if (sortType.equalsIgnoreCase("desc")) {
 
-      for (int i = 0; i < users.size() - 1; i++) {
-
-        for (int j = 0; j < users.size() - i - 1; j++) {
-
-          if (users.get(j).getGivenRatings() < users.get(j + 1).getGivenRatings()) {
-
-            Collections.swap(users, j, j + 1);
-          }
-
-          // if two users have the same number of given ratings, sort them descendent by name;
-          if (users.get(j).getGivenRatings() == users.get(j + 1).getGivenRatings()
-              && users.get(j).getUsername().compareTo(users.get(j + 1).getUsername()) < 0) {
-
-            Collections.swap(users, j, j + 1);
-          }
-        }
-      }
+      users.sort(Comparator.comparing(UserInputData::getGivenRatings).
+              thenComparing(UserInputData::getUsername));
+      Collections.reverse(users);
     }
+
     int count = 0;
     for (UserInputData user : users) {
 

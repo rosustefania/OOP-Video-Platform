@@ -5,11 +5,12 @@ import common.Constants;
 import fileio.ActorInputData;
 import fileio.MovieInputData;
 import fileio.SerialInputData;
-import mean.ActorMean;
+import mean.ActorsMean;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -50,74 +51,27 @@ public class ActorsQuery {
     ArrayList<String> query = new ArrayList<>();
     JSONObject object = new JSONObject();
 
+    for (ActorInputData actor : actors) {
+      ActorsMean actorMean = new ActorsMean(actor.getName(), actors, movies, serials);
+      actorMean.mean();
+      actor.setRating(actorMean.getFilmographyMean());
+    }
+
+
+
     // the case where the sort type is ascedent;
     if (sortType.equalsIgnoreCase("asc")) {
 
-      // sort actors by average rating of their filmography;
-      for (int i = 0; i < actors.size() - 1; i++) {
-
-        for (int j = 0; j < actors.size() - i - 1; j++) {
-
-          ActorInputData actor1 = actors.get(j);
-          ActorMean am1 = new ActorMean(actor1.getName(), actors, movies, serials);
-          am1.mean(); // calculate average mean of the actor;
-
-          ActorInputData actor2 = actors.get(j + 1);
-          ActorMean am2 = new ActorMean(actor2.getName(), actors, movies, serials);
-          am2.mean(); // calculate average mean of the actor;
-
-          // if two actors have the same average ratings, sort them
-          // ascendent by name;
-
-          if (am1.getFilmographyMean().equals(am2.getFilmographyMean())) {
-
-            if (actor1.getName().compareTo(actor2.getName()) > 0) {
-
-              Collections.swap(actors, j, j + 1);
-            }
-          }
-
-          if (am1.getFilmographyMean() > am2.getFilmographyMean()) {
-
-            Collections.swap(actors, j, j + 1);
-          }
-        }
-      }
+      actors.sort(Comparator.comparing(ActorInputData::getRating).
+              thenComparing(ActorInputData::getName));
     }
 
     // the case where the sort type is descedent;
     if (sortType.equalsIgnoreCase("desc")) {
 
-      // sort actors by average rating of their filmography;
-      for (int i = 0; i < actors.size() - 1; i++) {
-
-        for (int j = 0; j < actors.size() - i - 1; j++) {
-
-          ActorInputData actor1 = actors.get(j);
-
-          ActorMean am1 = new ActorMean(actor1.getName(), actors, movies, serials);
-          am1.mean(); // calculate average mean of the actor;
-
-          ActorInputData actor2 = actors.get(j + 1);
-          ActorMean am2 = new ActorMean(actor2.getName(), actors, movies, serials);
-          am2.mean(); // calculate average mean of the actor;
-
-          // if two actors have the same average ratings, sort them
-          // descendent by name;
-          if (am1.getFilmographyMean().equals(am2.getFilmographyMean())) {
-
-            if (actor1.getName().compareTo(actor2.getName()) < 0) {
-
-              Collections.swap(actors, j, j + 1);
-            }
-          }
-
-          if (am1.getFilmographyMean() < am2.getFilmographyMean()) {
-
-            Collections.swap(actors, j, j + 1);
-          }
-        }
-      }
+      actors.sort(Comparator.comparing(ActorInputData::getRating).
+              thenComparing(ActorInputData::getName));
+      Collections.reverse(actors);
     }
 
     int count = 0;
@@ -126,7 +80,7 @@ public class ActorsQuery {
     // actors into the query;
     for (int k = 0; k < actors.size(); k++) {
 
-      ActorMean am = new ActorMean(actors.get(k).getName(), actors, movies, serials);
+      ActorsMean am = new ActorsMean(actors.get(k).getName(), actors, movies, serials);
       am.mean();
 
       if (count < number) {
@@ -193,51 +147,16 @@ public class ActorsQuery {
     // the case where the sort type is ascedent;
     if (sortType.equalsIgnoreCase("asc")) {
 
-      // sort actors by number of the awards won;
-      for (int i = 0; i < haveAll.size() - 1; i++) {
-
-        for (int j = 0; j < haveAll.size() - i - 1; j++) {
-
-          if (haveAll.get(j).getAwardsWon() > haveAll.get(j + 1).getAwardsWon()) {
-
-            Collections.swap(haveAll, j, j + 1);
-          }
-
-          // if two actors have the same number of awards won, sort them ascendent by name;
-          if (haveAll.get(j).getAwardsWon() == haveAll.get(j + 1).getAwardsWon()) {
-
-            if (haveAll.get(j).getName().compareTo(haveAll.get(j + 1).getName()) > 0) {
-
-              Collections.swap(haveAll, j, j + 1);
-            }
-          }
-        }
-      }
+      haveAll.sort(Comparator.comparing(ActorInputData::getAwardsWon).
+              thenComparing(ActorInputData::getName));
     }
 
     // the case where the sort type is descedent;
     if (sortType.equalsIgnoreCase("desc")) {
 
-      // sort actors by number of the awards won;
-      for (int i = 0; i < haveAll.size() - 1; i++) {
-
-        for (int j = 0; j < haveAll.size() - i - 1; j++) {
-
-          if (haveAll.get(j).getAwardsWon() < haveAll.get(j + 1).getAwardsWon()) {
-
-            Collections.swap(haveAll, j, j + 1);
-          }
-
-          // if two actors have the same number of awards won, sort them descendent by name;
-          if (haveAll.get(j).getAwardsWon() == haveAll.get(j + 1).getAwardsWon()) {
-
-            if (haveAll.get(j).getName().compareTo(haveAll.get(j + 1).getName()) < 0) {
-
-              Collections.swap(haveAll, j, j + 1);
-            }
-          }
-        }
-      }
+      haveAll.sort(Comparator.comparing(ActorInputData::getAwardsWon).
+              thenComparing(ActorInputData::getName));
+      Collections.reverse(haveAll);
     }
 
     // put the actors name in the query;
@@ -289,32 +208,13 @@ public class ActorsQuery {
 
     if (sortType.equalsIgnoreCase("asc")) {
 
-      // sort actors by number of the awards won;
-      for (int i = 0; i < query.size() - 1; i++) {
-
-        for (int j = 0; j < query.size() - i - 1; j++) {
-
-          if (query.get(j).compareTo(query.get(j + 1)) > 0) {
-
-            Collections.swap(query, j, j + 1);
-          }
-        }
-      }
+      Collections.sort(query);
     }
 
     if (sortType.equalsIgnoreCase("desc")) {
 
-      // sort actors by number of the awards won;
-      for (int i = 0; i < query.size() - 1; i++) {
-
-        for (int j = 0; j < query.size() - i - 1; j++) {
-
-          if (query.get(j).compareTo(query.get(j + 1)) < 0) {
-
-            Collections.swap(query, j, j + 1);
-          }
-        }
-      }
+      Collections.sort(query);
+      Collections.reverse(query);
     }
 
     object.put(Constants.ID_STRING, this.id);
