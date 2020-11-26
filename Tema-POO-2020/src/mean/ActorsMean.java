@@ -6,7 +6,7 @@ import fileio.SerialInputData;
 
 import java.util.List;
 
-public final class ActorMean {
+public final class ActorsMean {
 
   private final String name;
 
@@ -19,7 +19,7 @@ public final class ActorMean {
   // the average rating of an actor's filmography;
   private Double filmographyMean;
 
-  public ActorMean(final String name, final List<ActorInputData> actors,
+  public ActorsMean(final String name, final List<ActorInputData> actors,
                    final List<MovieInputData> movies, final List<SerialInputData> serials) {
     this.name = name;
     this.actors = actors;
@@ -48,7 +48,7 @@ public final class ActorMean {
     return filmographyMean;
   }
 
-  /** method that calculates actor's mean */
+  /** method that calculates actors' mean */
   public void mean() {
     double sum = 0.0;
     int count = 0;

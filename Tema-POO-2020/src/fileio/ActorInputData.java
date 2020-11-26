@@ -19,7 +19,8 @@ public final class ActorInputData {
   private ArrayList<String> filmography;
   /** awards won by the actor */
   private Map<ActorsAwards, Integer> awards;
-
+  /** number of awards won by the actor */
+  private Double rating;
   /** number of awards won by the actor */
   private int awardsWon;
 
@@ -61,6 +62,14 @@ public final class ActorInputData {
 
   public void setCareerDescription(final String careerDescription) {
     this.careerDescription = careerDescription;
+  }
+
+  public Double getRating() {
+    return rating;
+  }
+
+  public void setRating(Double rating) {
+    this.rating = rating;
   }
 
   public int getAwardsWon() {

@@ -1,5 +1,6 @@
 Starting audit...
-[ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\fileio\ActorInputData.java:70:28: Parameter awardsWon should be final. [FinalParameters]
+[ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\fileio\ActorInputData.java:71:25: Parameter rating should be final. [FinalParameters]
+[ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\fileio\ActorInputData.java:79:28: Parameter awardsWon should be final. [FinalParameters]
 [ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\fileio\MovieInputData.java:47:30: Parameter ratingsMean should be final. [FinalParameters]
 [ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\fileio\MovieInputData.java:55:40: Parameter favouriteAppeareances should be final. [FinalParameters]
 [ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\fileio\MovieInputData.java:63:24: Parameter views should be final. [FinalParameters]
@@ -9,4 +10,4 @@ Starting audit...
 [ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\main\Main.java:76:3: Method length is 184 lines (max allowed is 150). [MethodLength]
 [ERROR] C:\Users\Stefi\Desktop\POO\tema1\Tema-POO-2020\.\src\recommendations\Recommendation.java:232:3: Method length is 171 lines (max allowed is 150). [MethodLength]
 Audit done.
-Checkstyle ends with 9 errors.
+Checkstyle ends with 10 errors.

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -45,55 +46,16 @@ public class MoviesQuery {
 
     // sort movies' list ascendent by average rating;
     if (sortType.equalsIgnoreCase("asc")) {
-      for (int i = 0; i < sortedMovies.size() - 1; i++) {
 
-        for (int j = 0; j < sortedMovies.size() - i - 1; j++) {
-
-          // calculate movies' average rating;
-          sortedMovies.get(j).mean();
-          sortedMovies.get(j + 1).mean();
-
-          if (sortedMovies.get(j).getRatingsMean() > sortedMovies.get(j + 1).getRatingsMean()) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-
-          // if two movies have the same average rating, sort tem ascendent by name;
-          if ((sortedMovies.get(j).getRatingsMean().equals(sortedMovies.get(j + 1)
-                  .getRatingsMean())) && (sortedMovies.get(j).getTitle()
-                  .compareTo(sortedMovies.get(j + 1).getTitle()) > 0)) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-        }
-      }
+      sortedMovies.sort(Comparator.comparing(MovieInputData::getRatingsMean).
+              thenComparing(MovieInputData::getTitle));
     }
 
     if (sortType.equalsIgnoreCase("desc")) {
 
-      // sort movies' list descendent by average rating;
-      for (int i = 0; i < sortedMovies.size() - 1; i++) {
-
-        for (int j = 0; j < sortedMovies.size() - i - 1; j++) {
-
-          // calculate movies' average rating;
-          sortedMovies.get(j).mean();
-          sortedMovies.get(j + 1).mean();
-
-          if (sortedMovies.get(j).getRatingsMean() < sortedMovies.get(j + 1).getRatingsMean()) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-
-          // if two movies have the same average rating, sort tem descendent by name;
-          if ((sortedMovies.get(j).getRatingsMean().equals(sortedMovies.get(j + 1)
-                  .getRatingsMean())) && (sortedMovies.get(j).getTitle()
-                  .compareTo(sortedMovies.get(j + 1).getTitle()) < 0)) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-        }
-      }
+      sortedMovies.sort(Comparator.comparing(MovieInputData::getRatingsMean).
+              thenComparing(MovieInputData::getTitle));
+      Collections.reverse(sortedMovies);
     }
 
     int count = 0;
@@ -195,51 +157,16 @@ public class MoviesQuery {
 
     // sort movies' list ascendent by appearences' number;
     if (sortType.equalsIgnoreCase("asc")) {
-      for (int i = 0; i < sortedMovies.size() - 1; i++) {
 
-        for (int j = 0; j < sortedMovies.size() - i - 1; j++) {
-
-          if (sortedMovies.get(j).getFavouriteAppeareances()
-                  > sortedMovies.get(j + 1).getFavouriteAppeareances()) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-
-          // if two movies have the same appearences' number, sort them ascendent by name;
-          if ((sortedMovies.get(j).getFavouriteAppeareances()
-                  == sortedMovies.get(j + 1).getFavouriteAppeareances())
-                  && (sortedMovies.get(j).getTitle().compareTo(sortedMovies.get(j + 1)
-                  .getTitle()) > 0)) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-        }
-      }
+      sortedMovies.sort(Comparator.comparing(MovieInputData::getFavouriteAppeareances).
+              thenComparing(MovieInputData::getTitle));
     }
 
     if (sortType.equalsIgnoreCase("desc")) {
 
-      // sort movies' list descendent by appearences' number;
-      for (int i = 0; i < sortedMovies.size() - 1; i++) {
-
-        for (int j = 0; j < sortedMovies.size() - i - 1; j++) {
-
-          if (sortedMovies.get(j).getFavouriteAppeareances()
-                  < sortedMovies.get(j + 1).getFavouriteAppeareances()) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-
-          // if two movies have the same appearences' number, sort them descendent by name;
-          if ((sortedMovies.get(j).getFavouriteAppeareances()
-                  == sortedMovies.get(j + 1).getFavouriteAppeareances())
-                  && (sortedMovies.get(j).getTitle().compareTo(sortedMovies.get(j + 1)
-                  .getTitle()) < 0)) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-        }
-      }
+      sortedMovies.sort(Comparator.comparing(MovieInputData::getFavouriteAppeareances).
+              thenComparing(MovieInputData::getTitle));
+      Collections.reverse(sortedMovies);
     }
 
     int count = 0;
@@ -316,47 +243,15 @@ public class MoviesQuery {
     // sort movies' list ascendent by duration;
     if (sortType.equalsIgnoreCase("asc")) {
 
-      for (int i = 0; i < sortedMovies.size() - 1; i++) {
-
-        for (int j = 0; j < sortedMovies.size() - i - 1; j++) {
-
-          if (sortedMovies.get(j).getDuration() > sortedMovies.get(j + 1).getDuration()) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-
-          // if two movies have the same duration, sort them ascendent by name;
-          if ((sortedMovies.get(j).getDuration() == sortedMovies.get(j + 1).getDuration())
-                  && (sortedMovies.get(j).getTitle().compareTo(sortedMovies
-                  .get(j + 1).getTitle()) > 0)) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-        }
-      }
+      sortedMovies.sort(Comparator.comparing(MovieInputData::getDuration).
+              thenComparing(MovieInputData::getTitle));
     }
 
     if (sortType.equalsIgnoreCase("desc")) {
 
-      // sort movies' list descendent by duration;
-      for (int i = 0; i < sortedMovies.size() - 1; i++) {
-
-        for (int j = 0; j < sortedMovies.size() - i - 1; j++) {
-
-          if (sortedMovies.get(j).getDuration() < sortedMovies.get(j + 1).getDuration()) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-
-          // if two movies have the same duration, sort them descendent by name;
-          if ((sortedMovies.get(j).getDuration() == sortedMovies.get(j + 1).getDuration())
-                  && (sortedMovies.get(j).getTitle().compareTo(sortedMovies.get(j + 1)
-                  .getTitle()) < 0)) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-        }
-      }
+      sortedMovies.sort(Comparator.comparing(MovieInputData::getDuration).
+              thenComparing(MovieInputData::getTitle));
+      Collections.reverse(sortedMovies);
     }
 
     int count = 0;
@@ -451,47 +346,15 @@ public class MoviesQuery {
     // sort movies' list ascendent by number of views;
     if (sortType.equalsIgnoreCase("asc")) {
 
-      for (int i = 0; i < sortedMovies.size() - 1; i++) {
-
-        for (int j = 0; j < sortedMovies.size() - i - 1; j++) {
-
-          if (sortedMovies.get(j).getViews() > sortedMovies.get(j + 1).getViews()) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-
-          // if two movies have the same number of views, sort them ascendent by name;
-          if ((sortedMovies.get(j).getViews() == sortedMovies.get(j + 1).getViews())
-                  && (sortedMovies.get(j).getTitle().compareTo(sortedMovies.get(j + 1)
-                  .getTitle()) > 0)) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-        }
-      }
+      sortedMovies.sort(Comparator.comparing(MovieInputData::getViews).
+              thenComparing(MovieInputData::getTitle));
     }
 
     if (sortType.equalsIgnoreCase("desc")) {
 
-      // sort movies' list descendent by number of views;
-      for (int i = 0; i < sortedMovies.size() - 1; i++) {
-
-        for (int j = 0; j < sortedMovies.size() - i - 1; j++) {
-
-          if (sortedMovies.get(j).getViews() < sortedMovies.get(j + 1).getViews()) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-
-          // if two movies have the same number of views, sort them descendent by name;
-          if ((sortedMovies.get(j).getViews() == sortedMovies.get(j + 1).getViews())
-                  && (sortedMovies.get(j).getTitle().compareTo(sortedMovies.get(j + 1)
-                  .getTitle()) < 0)) {
-
-            Collections.swap(sortedMovies, j, j + 1);
-          }
-        }
-      }
+      sortedMovies.sort(Comparator.comparing(MovieInputData::getViews).
+              thenComparing(MovieInputData::getTitle));
+      Collections.reverse(sortedMovies);
     }
 
 
